@@ -380,3 +380,34 @@ h1 {
 .difficulty {
     color: #00ff88;
 }
+/* =========================
+   DANGER EFFECTS
+========================= */
+
+.timer.danger {
+    animation: dangerPulse 0.5s infinite alternate;
+    border-color: #ff3333;
+    color: #ff3333;
+    box-shadow:
+        0 0 12px #ff3333,
+        inset 0 0 10px rgba(255, 51, 51, 0.15);
+}
+
+.lives.danger {
+    animation: dangerPulse 0.5s infinite alternate;
+    border-color: #ff3333;
+    color: #ff3333;
+    box-shadow:
+        0 0 12px #ff3333,
+        inset 0 0 10px rgba(255, 51, 51, 0.15);
+}
+
+@keyframes dangerPulse {
+    from {
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(1.05);
+    }
+}
