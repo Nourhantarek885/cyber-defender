@@ -91,7 +91,14 @@ function startGame() {
 
     scoreElement.textContent = score;
     timerElement.textContent = timeLeft;
+    if (timeLeft <= 10) {
+    timerElement.parentElement.classList.add("danger");
+} else {
+    timerElement.parentElement.classList.remove("danger");
+}
     livesElement.textContent = "❤️❤️❤️";
+    timerElement.parentElement.classList.remove("danger");
+livesElement.parentElement.classList.remove("danger");
 
     message.style.display = "none";
 
@@ -198,6 +205,11 @@ function loseLife() {
     lives--;
 
     livesElement.textContent = "❤️".repeat(lives);
+    if (lives <= 1) {
+    livesElement.parentElement.classList.add("danger");
+} else {
+    livesElement.parentElement.classList.remove("danger");
+}
 
     playLifeLostSound();
 
