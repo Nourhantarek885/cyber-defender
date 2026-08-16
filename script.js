@@ -4,24 +4,33 @@ let timeLeft = 30;
 let lives = 3;
 let timerInterval;
 
+const startScreen = document.getElementById("start-screen");
+const gameScreen = document.getElementById("game-screen");
+
 const scoreElement = document.getElementById("score");
 const highScoreElement = document.getElementById("high-score");
+const startHighScoreElement = document.getElementById("start-high-score");
 const timerElement = document.getElementById("timer");
 const livesElement = document.getElementById("lives");
 const difficultyElement = document.getElementById("difficulty");
+
 const gameArea = document.getElementById("game-area");
 const startButton = document.getElementById("start-button");
 const message = document.getElementById("message");
 
-let highScore = Number(localStorage.getItem("cyberDefenderHighScore")) || 0;
+let highScore =
+    Number(localStorage.getItem("cyberDefenderHighScore")) || 0;
 
 highScoreElement.textContent = highScore;
+startHighScoreElement.textContent = highScore;
+
 
 // =========================
 // SOUND EFFECTS
 // =========================
 
-const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+const audioContext =
+    new (window.AudioContext || window.webkitAudioContext)();
 
 function playSound(frequency, duration, type = "sine") {
     const oscillator = audioContext.createOscillator();
@@ -30,7 +39,11 @@ function playSound(frequency, duration, type = "sine") {
     oscillator.type = type;
     oscillator.frequency.value = frequency;
 
-    gainNode.gain.setValueAtTime(0.15, audioContext.currentTime);
+    gainNode.gain.setValueAtTime(
+        0.15,
+        audioContext.currentTime
+    );
+
     gainNode.gain.exponentialRampToValueAtTime(
         0.01,
         audioContext.currentTime + duration
@@ -55,16 +68,21 @@ function playGameOverSound() {
     playSound(120, 0.5, "sawtooth");
 }
 
+
 // =========================
-// GAME
+// START GAME
 // =========================
 
 startButton.onclick = startGame;
 
 function startGame() {
+
     if (audioContext.state === "suspended") {
         audioContext.resume();
     }
+
+    startScreen.style.display = "none";
+    gameScreen.style.display = "block";
 
     score = 0;
     timeLeft = 30;
@@ -77,17 +95,21 @@ function startGame() {
 
     message.style.display = "none";
 
-    startButton.textContent = "GAME RUNNING";
-    startButton.disabled = true;
-
     updateDifficulty();
 
     startTimer();
     createThreat();
 }
 
+
+// =========================
+// HIGH SCORE
+// =========================
+
 function updateHighScore() {
+
     if (score > highScore) {
+
         highScore = score;
 
         localStorage.setItem(
@@ -99,36 +121,60 @@ function updateHighScore() {
     }
 }
 
+
+// =========================
+// DIFFICULTY
+// =========================
+
 function updateDifficulty() {
+
     if (score >= 10) {
+
         difficultyElement.textContent = "HARD";
         difficultyElement.style.color = "#ff3333";
-        difficultyElement.style.textShadow = "0 0 15px #ff3333";
+        difficultyElement.style.textShadow =
+            "0 0 15px #ff3333";
+
     } else if (score >= 5) {
+
         difficultyElement.textContent = "MEDIUM";
         difficultyElement.style.color = "#ffff00";
-        difficultyElement.style.textShadow = "0 0 15px #ffff00";
+        difficultyElement.style.textShadow =
+            "0 0 15px #ffff00";
+
     } else {
+
         difficultyElement.textContent = "EASY";
         difficultyElement.style.color = "#00ff88";
-        difficultyElement.style.textShadow = "0 0 15px #00ff88";
+        difficultyElement.style.textShadow =
+            "0 0 15px #00ff88";
     }
 }
 
 function getThreatSpeed() {
+
     if (score >= 10) {
         return 700;
-    } else if (score >= 5) {
-        return 1000;
-    } else {
-        return 1500;
     }
+
+    if (score >= 5) {
+        return 1000;
+    }
+
+    return 1500;
 }
 
+
+// =========================
+// TIMER
+// =========================
+
 function startTimer() {
+
     clearInterval(timerInterval);
 
     timerInterval = setInterval(function () {
+
         timeLeft--;
 
         timerElement.textContent = timeLeft;
@@ -136,10 +182,17 @@ function startTimer() {
         if (timeLeft <= 0) {
             endGame("TIME'S UP!");
         }
+
     }, 1000);
 }
 
+
+// =========================
+// LIVES
+// =========================
+
 function loseLife() {
+
     if (!gameRunning) return;
 
     lives--;
@@ -153,7 +206,13 @@ function loseLife() {
     }
 }
 
+
+// =========================
+// GAME OVER
+// =========================
+
 function endGame(reason) {
+
     gameRunning = false;
 
     clearInterval(timerInterval);
@@ -162,18 +221,34 @@ function endGame(reason) {
 
     updateHighScore();
 
-    document.querySelectorAll(".threat").forEach(function (threat) {
-        threat.remove();
-    });
+    document
+        .querySelectorAll(".threat")
+        .forEach(function (threat) {
+            threat.remove();
+        });
 
-    message.textContent = reason + " Score: " + score;
+    message.textContent =
+        reason + " Score: " + score;
+
     message.style.display = "block";
 
-    startButton.textContent = "PLAY AGAIN";
-    startButton.disabled = false;
+    setTimeout(function () {
+
+        gameScreen.style.display = "none";
+        startScreen.style.display = "flex";
+
+        startHighScoreElement.textContent = highScore;
+
+    }, 2500);
 }
 
+
+// =========================
+// CREATE THREAT
+// =========================
+
 function createThreat() {
+
     if (!gameRunning) return;
 
     const threat = document.createElement("div");
@@ -188,10 +263,15 @@ function createThreat() {
     const maxX = gameArea.clientWidth - 40;
     const maxY = gameArea.clientHeight - 40;
 
-    threat.style.left = Math.random() * maxX + "px";
-    threat.style.top = Math.random() * maxY + "px";
+    threat.style.left =
+        Math.random() * maxX + "px";
+
+    threat.style.top =
+        Math.random() * maxY + "px";
+
 
     threat.onclick = function () {
+
         if (!gameRunning) return;
 
         playHitSound();
@@ -207,10 +287,17 @@ function createThreat() {
         createThreat();
     };
 
+
     gameArea.appendChild(threat);
 
+
     setTimeout(function () {
-        if (threat.parentElement && gameRunning) {
+
+        if (
+            threat.parentElement &&
+            gameRunning
+        ) {
+
             threat.remove();
 
             loseLife();
@@ -219,5 +306,6 @@ function createThreat() {
                 createThreat();
             }
         }
+
     }, getThreatSpeed());
 }
