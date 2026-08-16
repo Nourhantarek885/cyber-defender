@@ -1,10 +1,12 @@
 let score = 0;
 let gameRunning = false;
 let timeLeft = 30;
+let lives = 3;
 let timerInterval;
 
 const scoreElement = document.getElementById("score");
 const timerElement = document.getElementById("timer");
+const livesElement = document.getElementById("lives");
 const gameArea = document.getElementById("game-area");
 const startButton = document.getElementById("start-button");
 const message = document.getElementById("message");
@@ -16,12 +18,15 @@ startButton.onclick = function () {
 function startGame() {
     score = 0;
     timeLeft = 30;
+    lives = 3;
     gameRunning = true;
 
     scoreElement.textContent = score;
     timerElement.textContent = timeLeft;
+    livesElement.textContent = "❤️❤️❤️";
 
     message.style.display = "none";
+
     startButton.textContent = "GAME RUNNING";
     startButton.disabled = true;
 
@@ -38,12 +43,24 @@ function startTimer() {
         timerElement.textContent = timeLeft;
 
         if (timeLeft <= 0) {
-            endGame();
+            endGame("TIME'S UP!");
         }
     }, 1000);
 }
 
-function endGame() {
+function loseLife() {
+    if (!gameRunning) return;
+
+    lives--;
+
+    livesElement.textContent = "❤️".repeat(lives);
+
+    if (lives <= 0) {
+        endGame("NO LIVES LEFT!");
+    }
+}
+
+function endGame(reason) {
     gameRunning = false;
 
     clearInterval(timerInterval);
@@ -52,7 +69,7 @@ function endGame() {
         threat.remove();
     });
 
-    message.textContent = "GAME OVER! Score: " + score;
+    message.textContent = reason + " Score: " + score;
     message.style.display = "block";
 
     startButton.textContent = "PLAY AGAIN";
@@ -91,9 +108,14 @@ function createThreat() {
     gameArea.appendChild(threat);
 
     setTimeout(function () {
-        if (threat.parentElement) {
+        if (threat.parentElement && gameRunning) {
             threat.remove();
-            createThreat();
+
+            loseLife();
+
+            if (gameRunning) {
+                createThreat();
+            }
         }
     }, 1500);
 }
