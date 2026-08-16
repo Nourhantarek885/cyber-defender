@@ -7,6 +7,7 @@ let timerInterval;
 const scoreElement = document.getElementById("score");
 const timerElement = document.getElementById("timer");
 const livesElement = document.getElementById("lives");
+const difficultyElement = document.getElementById("difficulty");
 const gameArea = document.getElementById("game-area");
 const startButton = document.getElementById("start-button");
 const message = document.getElementById("message");
@@ -24,6 +25,7 @@ function startGame() {
     scoreElement.textContent = score;
     timerElement.textContent = timeLeft;
     livesElement.textContent = "❤️❤️❤️";
+    difficultyElement.textContent = "EASY";
 
     message.style.display = "none";
 
@@ -32,6 +34,26 @@ function startGame() {
 
     startTimer();
     createThreat();
+}
+
+function updateDifficulty() {
+    if (score >= 10) {
+        difficultyElement.textContent = "HARD";
+    } else if (score >= 5) {
+        difficultyElement.textContent = "MEDIUM";
+    } else {
+        difficultyElement.textContent = "EASY";
+    }
+}
+
+function getThreatSpeed() {
+    if (score >= 10) {
+        return 700;
+    } else if (score >= 5) {
+        return 1000;
+    } else {
+        return 1500;
+    }
 }
 
 function startTimer() {
@@ -98,7 +120,10 @@ function createThreat() {
         if (!gameRunning) return;
 
         score++;
+
         scoreElement.textContent = score;
+
+        updateDifficulty();
 
         threat.remove();
 
@@ -117,5 +142,5 @@ function createThreat() {
                 createThreat();
             }
         }
-    }, 1500);
-}
+    }, getThreatSpeed());
+}ر
