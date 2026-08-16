@@ -25,7 +25,9 @@ function startGame() {
     scoreElement.textContent = score;
     timerElement.textContent = timeLeft;
     livesElement.textContent = "❤️❤️❤️";
-    difficultyElement.textContent = "EASY";
+difficultyElement.textContent = "EASY";
+difficultyElement.style.color = "#00ff88";
+difficultyElement.style.textShadow = "0 0 15px #00ff88";
 
     message.style.display = "none";
 
