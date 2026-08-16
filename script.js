@@ -39,6 +39,22 @@ function startGame() {
 function updateDifficulty() {
     if (score >= 10) {
         difficultyElement.textContent = "HARD";
+        difficultyElement.style.color = "#ff3333";
+        difficultyElement.style.textShadow = "0 0 15px #ff3333";
+
+    } else if (score >= 5) {
+        difficultyElement.textContent = "MEDIUM";
+        difficultyElement.style.color = "#ffff00";
+        difficultyElement.style.textShadow = "0 0 15px #ffff00";
+
+    } else {
+        difficultyElement.textContent = "EASY";
+        difficultyElement.style.color = "#00ff88";
+        difficultyElement.style.textShadow = "0 0 15px #00ff88";
+    }
+}
+    if (score >= 10) {
+        difficultyElement.textContent = "HARD";
     } else if (score >= 5) {
         difficultyElement.textContent = "MEDIUM";
     } else {
