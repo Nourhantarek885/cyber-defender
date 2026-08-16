@@ -319,3 +319,64 @@ h1 {
         background-position: 30px 30px;
     }
 }
+/* =========================
+   CYBERPUNK HUD
+========================= */
+
+.score-board,
+.high-score,
+.timer,
+.lives,
+.difficulty {
+    display: inline-block;
+
+    margin: 6px;
+    padding: 8px 16px;
+
+    border: 1px solid #00ff88;
+    border-radius: 6px;
+
+    background: rgba(0, 255, 136, 0.04);
+
+    box-shadow:
+        0 0 8px rgba(0, 255, 136, 0.4),
+        inset 0 0 8px rgba(0, 255, 136, 0.05);
+
+    font-size: 17px;
+
+    transition: 0.25s;
+}
+
+.score-board:hover,
+.high-score:hover,
+.timer:hover,
+.lives:hover,
+.difficulty:hover {
+    box-shadow:
+        0 0 15px rgba(0, 255, 136, 0.7),
+        inset 0 0 12px rgba(0, 255, 136, 0.1);
+
+    transform: translateY(-2px);
+}
+
+.score-board {
+    color: #00ff88;
+}
+
+.high-score {
+    color: #00eaff;
+    border-color: #00eaff;
+}
+
+.timer {
+    color: #ffffff;
+}
+
+.lives {
+    color: #ff4d6d;
+    border-color: #ff4d6d;
+}
+
+.difficulty {
+    color: #00ff88;
+}
