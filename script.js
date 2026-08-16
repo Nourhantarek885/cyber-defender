@@ -177,6 +177,31 @@ function getThreatSpeed() {
 // =========================
 
 function startTimer() {
+    function winGame() {
+    gameRunning = false;
+
+    clearInterval(timerInterval);
+
+    updateHighScore();
+
+    document
+        .querySelectorAll(".threat")
+        .forEach(function (threat) {
+            threat.remove();
+        });
+
+    message.textContent =
+        "🏆 VICTORY! Score: " + score;
+
+    message.style.display = "block";
+
+    setTimeout(function () {
+        gameScreen.style.display = "none";
+        startScreen.style.display = "flex";
+
+        startHighScoreElement.textContent = highScore;
+    }, 2500);
+}
 
     clearInterval(timerInterval);
 
@@ -186,8 +211,9 @@ function startTimer() {
 
         timerElement.textContent = timeLeft;
 
-        if (timeLeft <= 0) {
-            endGame("TIME'S UP!");
+       if (timeLeft <= 0) {
+    winGame();
+}
         }
 
     }, 1000);
