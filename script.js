@@ -5,12 +5,17 @@ let lives = 3;
 let timerInterval;
 
 const scoreElement = document.getElementById("score");
+const highScoreElement = document.getElementById("high-score");
 const timerElement = document.getElementById("timer");
 const livesElement = document.getElementById("lives");
 const difficultyElement = document.getElementById("difficulty");
 const gameArea = document.getElementById("game-area");
 const startButton = document.getElementById("start-button");
 const message = document.getElementById("message");
+
+let highScore = Number(localStorage.getItem("cyberDefenderHighScore")) || 0;
+
+highScoreElement.textContent = highScore;
 
 startButton.onclick = startGame;
 
@@ -33,6 +38,19 @@ function startGame() {
 
     startTimer();
     createThreat();
+}
+
+function updateHighScore() {
+    if (score > highScore) {
+        highScore = score;
+
+        localStorage.setItem(
+            "cyberDefenderHighScore",
+            highScore
+        );
+
+        highScoreElement.textContent = highScore;
+    }
 }
 
 function updateDifficulty() {
@@ -91,6 +109,8 @@ function endGame(reason) {
     gameRunning = false;
 
     clearInterval(timerInterval);
+
+    updateHighScore();
 
     document.querySelectorAll(".threat").forEach(function (threat) {
         threat.remove();
