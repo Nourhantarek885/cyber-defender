@@ -6,7 +6,9 @@ const gameArea = document.getElementById("game-area");
 const startButton = document.getElementById("start-button");
 const message = document.getElementById("message");
 
-startButton.addEventListener("click", startGame);
+startButton.onclick = function () {
+    startGame();
+};
 
 function startGame() {
     score = 0;
@@ -14,7 +16,6 @@ function startGame() {
 
     scoreElement.textContent = score;
     message.style.display = "none";
-
     startButton.textContent = "GAME RUNNING";
 
     createThreat();
@@ -26,7 +27,6 @@ function createThreat() {
     const threat = document.createElement("div");
 
     threat.textContent = "⚠️";
-
     threat.style.position = "absolute";
     threat.style.fontSize = "35px";
     threat.style.cursor = "pointer";
@@ -37,18 +37,18 @@ function createThreat() {
     threat.style.left = Math.random() * maxX + "px";
     threat.style.top = Math.random() * maxY + "px";
 
-    threat.addEventListener("click", function () {
+    threat.onclick = function () {
         score++;
         scoreElement.textContent = score;
 
         threat.remove();
 
         createThreat();
-    });
+    };
 
     gameArea.appendChild(threat);
 
-    setTimeout(() => {
+    setTimeout(function () {
         if (threat.parentElement) {
             threat.remove();
             createThreat();
