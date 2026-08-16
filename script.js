@@ -17,9 +17,55 @@ let highScore = Number(localStorage.getItem("cyberDefenderHighScore")) || 0;
 
 highScoreElement.textContent = highScore;
 
+// =========================
+// SOUND EFFECTS
+// =========================
+
+const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+function playSound(frequency, duration, type = "sine") {
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+
+    oscillator.type = type;
+    oscillator.frequency.value = frequency;
+
+    gainNode.gain.setValueAtTime(0.15, audioContext.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(
+        0.01,
+        audioContext.currentTime + duration
+    );
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+
+    oscillator.start();
+    oscillator.stop(audioContext.currentTime + duration);
+}
+
+function playHitSound() {
+    playSound(700, 0.1, "square");
+}
+
+function playLifeLostSound() {
+    playSound(180, 0.25, "sawtooth");
+}
+
+function playGameOverSound() {
+    playSound(120, 0.5, "sawtooth");
+}
+
+// =========================
+// GAME
+// =========================
+
 startButton.onclick = startGame;
 
 function startGame() {
+    if (audioContext.state === "suspended") {
+        audioContext.resume();
+    }
+
     score = 0;
     timeLeft = 30;
     lives = 3;
@@ -100,6 +146,8 @@ function loseLife() {
 
     livesElement.textContent = "❤️".repeat(lives);
 
+    playLifeLostSound();
+
     if (lives <= 0) {
         endGame("NO LIVES LEFT!");
     }
@@ -109,6 +157,8 @@ function endGame(reason) {
     gameRunning = false;
 
     clearInterval(timerInterval);
+
+    playGameOverSound();
 
     updateHighScore();
 
@@ -143,6 +193,8 @@ function createThreat() {
 
     threat.onclick = function () {
         if (!gameRunning) return;
+
+        playHitSound();
 
         score++;
 
