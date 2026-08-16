@@ -13,34 +13,67 @@
 
     <div class="game-container">
 
-        <h1>🛡️ CYBER DEFENDER</h1>
+        <!-- START SCREEN -->
+        <div id="start-screen">
 
-        <p class="subtitle">
-            Defend the network from cyber attacks!
-        </p>
+            <div class="logo">🛡️</div>
 
-        <div class="score-board">
-            Score: <span id="score">0</span>
-        </div>
-        <div class="high-score">
-    High Score: <span id="high-score">0</span>
-</div>
-        <div class="timer">
-    Time: <span id="timer">30</span>s
-</div>
-        <div class="lives">
-    Lives: <span id="lives">❤️❤️❤️</span>
-</div>
-<div class="difficulty">
-    Level: <span id="difficulty">EASY</span>
-</div>
-        <div id="game-area">
-            <div id="message">
-                Click START to begin
+            <h1>CYBER DEFENDER</h1>
+
+            <p class="start-description">
+                Defend the network from incoming cyber threats.
+            </p>
+
+            <div class="start-info">
+                <p>🏆 High Score: <span id="start-high-score">0</span></p>
+                <p>⏱️ Time: 30 seconds</p>
+                <p>❤️ Lives: 3</p>
             </div>
+
+            <button id="start-button">
+                START GAME
+            </button>
+
         </div>
 
-        <button id="start-button">START GAME</button>
+        <!-- GAME SCREEN -->
+        <div id="game-screen">
+
+            <h1>🛡️ CYBER DEFENDER</h1>
+
+            <p class="subtitle">
+                Defend the network from cyber attacks!
+            </p>
+
+            <div class="score-board">
+                Score: <span id="score">0</span>
+            </div>
+
+            <div class="high-score">
+                High Score: <span id="high-score">0</span>
+            </div>
+
+            <div class="timer">
+                Time: <span id="timer">30</span>s
+            </div>
+
+            <div class="lives">
+                Lives: <span id="lives">❤️❤️❤️</span>
+            </div>
+
+            <div class="difficulty">
+                Level: <span id="difficulty">EASY</span>
+            </div>
+
+            <div id="game-area">
+
+                <div id="message">
+                    GAME OVER
+                </div>
+
+            </div>
+
+        </div>
 
     </div>
 
