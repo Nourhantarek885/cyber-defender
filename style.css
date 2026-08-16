@@ -204,3 +204,57 @@ h1 {
 #game-screen {
     display: none;
 }
+/* =========================
+   CYBERPUNK THREAT EFFECT
+========================= */
+
+.threat {
+    animation: threatSpawn 0.35s ease-out,
+               threatPulse 1s infinite alternate;
+
+    filter:
+        drop-shadow(0 0 5px #00ff88)
+        drop-shadow(0 0 12px #00ff88);
+
+    user-select: none;
+
+    transition: transform 0.15s ease;
+}
+
+.threat:hover {
+    transform: scale(1.25);
+
+    filter:
+        drop-shadow(0 0 8px #00ff88)
+        drop-shadow(0 0 20px #00ff88);
+}
+
+.threat:active {
+    transform: scale(0.7);
+}
+
+@keyframes threatSpawn {
+    from {
+        opacity: 0;
+        transform: scale(0) rotate(-90deg);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+    }
+}
+
+@keyframes threatPulse {
+    from {
+        filter:
+            drop-shadow(0 0 4px #00ff88)
+            drop-shadow(0 0 8px #00ff88);
+    }
+
+    to {
+        filter:
+            drop-shadow(0 0 10px #00ff88)
+            drop-shadow(0 0 22px #00ff88);
+    }
+}
