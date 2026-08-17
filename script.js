@@ -19,8 +19,11 @@ const startButton = document.getElementById("start-button");
 const message = document.getElementById("message");
 
 const achievement = document.getElementById("achievement");
+const comboAchievement =
+    document.getElementById("combo-achievement");
 
 let firstHitUnlocked = false;
+let comboFiveUnlocked = false;
 
 let highScore =
     Number(localStorage.getItem("cyberDefenderHighScore")) || 0;
@@ -94,6 +97,9 @@ function startGame() {
     gameRunning = true;
 
     firstHitUnlocked = false;
+    comboFiveUnlocked = false;
+
+comboAchievement.classList.remove("show");
 
     achievement.classList.remove("show");
 
@@ -355,6 +361,15 @@ function createThreat() {
         unlockFirstHit();
 
         score++;
+        if (score >= 5 && !comboFiveUnlocked) {
+    comboFiveUnlocked = true;
+
+    comboAchievement.classList.remove("show");
+
+    void comboAchievement.offsetWidth;
+
+    comboAchievement.classList.add("show");
+}
 
         scoreElement.textContent = score;
 
