@@ -23,6 +23,14 @@ const comboAchievement =
     document.getElementById("combo-achievement");
 const masterAchievement =
     document.getElementById("master-achievement");
+const firstHitPanel =
+    document.getElementById("achievement-first-hit");
+
+const comboFivePanel =
+    document.getElementById("achievement-combo-five");
+
+const cyberMasterPanel =
+    document.getElementById("achievement-cyber-master");
 
 let firstHitUnlocked = false;
 let comboFiveUnlocked = false;
