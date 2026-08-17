@@ -22,40 +22,12 @@ const achievement = document.getElementById("achievement");
 const comboAchievement = document.getElementById("combo-achievement");
 const masterAchievement = document.getElementById("master-achievement");
 
-const firstHitPanel =
-    document.getElementById("achievement-first-hit");
-
-const comboFivePanel =
-    document.getElementById("achievement-combo-five");
-
-const cyberMasterPanel =
-    document.getElementById("achievement-cyber-master");
-
 let firstHitUnlocked = false;
 let comboFiveUnlocked = false;
 let cyberMasterUnlocked = false;
 
-const achievements = {
-    firstHit: false,
-    comboFive: false,
-    cyberMaster: false
-};
-
-const savedAchievements =
-    JSON.parse(
-        localStorage.getItem("cyberDefenderAchievements")
-    );
-
-if (savedAchievements) {
-    achievements.firstHit = savedAchievements.firstHit || false;
-    achievements.comboFive = savedAchievements.comboFive || false;
-    achievements.cyberMaster = savedAchievements.cyberMaster || false;
-}
-
 let highScore =
-    Number(
-        localStorage.getItem("cyberDefenderHighScore")
-    ) || 0;
+    Number(localStorage.getItem("cyberDefenderHighScore")) || 0;
 
 highScoreElement.textContent = highScore;
 startHighScoreElement.textContent = highScore;
@@ -70,11 +42,8 @@ const audioContext =
 
 function playSound(frequency, duration, type = "sine") {
 
-    const oscillator =
-        audioContext.createOscillator();
-
-    const gainNode =
-        audioContext.createGain();
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
 
     oscillator.type = type;
     oscillator.frequency.value = frequency;
@@ -93,7 +62,6 @@ function playSound(frequency, duration, type = "sine") {
     gainNode.connect(audioContext.destination);
 
     oscillator.start();
-
     oscillator.stop(
         audioContext.currentTime + duration
     );
@@ -109,55 +77,6 @@ function playLifeLostSound() {
 
 function playGameOverSound() {
     playSound(120, 0.5, "sawtooth");
-}
-
-
-// =========================
-// ACHIEVEMENTS
-// =========================
-
-function saveAchievements() {
-
-    localStorage.setItem(
-        "cyberDefenderAchievements",
-        JSON.stringify(achievements)
-    );
-}
-
-function updateAchievementsPanel() {
-
-    if (achievements.firstHit && firstHitPanel) {
-        firstHitPanel.classList.add("unlocked");
-        firstHitPanel.querySelector("span").textContent = "🔓";
-    }
-
-    if (achievements.comboFive && comboFivePanel) {
-        comboFivePanel.classList.add("unlocked");
-        comboFivePanel.querySelector("span").textContent = "🔓";
-    }
-
-    if (achievements.cyberMaster && cyberMasterPanel) {
-        cyberMasterPanel.classList.add("unlocked");
-        cyberMasterPanel.querySelector("span").textContent = "🔓";
-    }
-}
-
-function unlockFirstHit() {
-
-    if (firstHitUnlocked) return;
-
-    firstHitUnlocked = true;
-
-    achievements.firstHit = true;
-
-    saveAchievements();
-    updateAchievementsPanel();
-
-    achievement.classList.remove("show");
-
-    void achievement.offsetWidth;
-
-    achievement.classList.add("show");
 }
 
 
@@ -179,16 +98,23 @@ function startGame() {
     score = 0;
     timeLeft = 30;
     lives = 3;
-
     gameRunning = true;
 
     firstHitUnlocked = false;
     comboFiveUnlocked = false;
     cyberMasterUnlocked = false;
 
-    achievement.classList.remove("show");
-    comboAchievement.classList.remove("show");
-    masterAchievement.classList.remove("show");
+    if (achievement) {
+        achievement.classList.remove("show");
+    }
+
+    if (comboAchievement) {
+        comboAchievement.classList.remove("show");
+    }
+
+    if (masterAchievement) {
+        masterAchievement.classList.remove("show");
+    }
 
     scoreElement.textContent = score;
     timerElement.textContent = timeLeft;
@@ -221,8 +147,7 @@ function updateHighScore() {
             highScore
         );
 
-        highScoreElement.textContent =
-            highScore;
+        highScoreElement.textContent = highScore;
     }
 }
 
@@ -236,30 +161,21 @@ function updateDifficulty() {
     if (score >= 10) {
 
         difficultyElement.textContent = "HARD";
-
-        difficultyElement.style.color =
-            "#ff3333";
-
+        difficultyElement.style.color = "#ff3333";
         difficultyElement.style.textShadow =
             "0 0 15px #ff3333";
 
     } else if (score >= 5) {
 
         difficultyElement.textContent = "MEDIUM";
-
-        difficultyElement.style.color =
-            "#ffff00";
-
+        difficultyElement.style.color = "#ffff00";
         difficultyElement.style.textShadow =
             "0 0 15px #ffff00";
 
     } else {
 
         difficultyElement.textContent = "EASY";
-
-        difficultyElement.style.color =
-            "#00ff88";
-
+        difficultyElement.style.color = "#00ff88";
         difficultyElement.style.textShadow =
             "0 0 15px #00ff88";
     }
@@ -267,13 +183,9 @@ function updateDifficulty() {
 
 function getThreatSpeed() {
 
-    if (score >= 10) {
-        return 700;
-    }
+    if (score >= 10) return 700;
 
-    if (score >= 5) {
-        return 1000;
-    }
+    if (score >= 5) return 1000;
 
     return 1500;
 }
@@ -291,18 +203,10 @@ function startTimer() {
 
         timeLeft--;
 
-        timerElement.textContent =
-            timeLeft;
+        timerElement.textContent = timeLeft;
 
         if (timeLeft <= 10) {
-
-            timerElement.parentElement
-                .classList.add("danger");
-
-        } else {
-
-            timerElement.parentElement
-                .classList.remove("danger");
+            timerElement.parentElement.classList.add("danger");
         }
 
         if (timeLeft <= 0) {
@@ -325,11 +229,9 @@ function winGame() {
 
     updateHighScore();
 
-    document
-        .querySelectorAll(".threat")
-        .forEach(function (threat) {
-            threat.remove();
-        });
+    document.querySelectorAll(".threat").forEach(function (threat) {
+        threat.remove();
+    });
 
     message.textContent =
         "🏆 VICTORY! Score: " + score;
@@ -339,11 +241,9 @@ function winGame() {
     setTimeout(function () {
 
         gameScreen.style.display = "none";
-
         startScreen.style.display = "flex";
 
-        startHighScoreElement.textContent =
-            highScore;
+        startHighScoreElement.textContent = highScore;
 
     }, 2500);
 }
@@ -365,14 +265,7 @@ function loseLife() {
     playLifeLostSound();
 
     if (lives <= 1) {
-
-        livesElement.parentElement
-            .classList.add("danger");
-
-    } else {
-
-        livesElement.parentElement
-            .classList.remove("danger");
+        livesElement.parentElement.classList.add("danger");
     }
 
     if (lives <= 0) {
@@ -395,11 +288,9 @@ function endGame(reason) {
 
     updateHighScore();
 
-    document
-        .querySelectorAll(".threat")
-        .forEach(function (threat) {
-            threat.remove();
-        });
+    document.querySelectorAll(".threat").forEach(function (threat) {
+        threat.remove();
+    });
 
     message.textContent =
         reason + " Score: " + score;
@@ -409,13 +300,31 @@ function endGame(reason) {
     setTimeout(function () {
 
         gameScreen.style.display = "none";
-
         startScreen.style.display = "flex";
 
-        startHighScoreElement.textContent =
-            highScore;
+        startHighScoreElement.textContent = highScore;
 
     }, 2500);
+}
+
+
+// =========================
+// FIRST HIT
+// =========================
+
+function unlockFirstHit() {
+
+    if (firstHitUnlocked) return;
+
+    firstHitUnlocked = true;
+
+    if (!achievement) return;
+
+    achievement.classList.remove("show");
+
+    void achievement.offsetWidth;
+
+    achievement.classList.add("show");
 }
 
 
@@ -427,22 +336,17 @@ function createThreat() {
 
     if (!gameRunning) return;
 
-    const threat =
-        document.createElement("div");
+    const threat = document.createElement("div");
 
     threat.textContent = "⚠️";
-
     threat.classList.add("threat");
 
     threat.style.position = "absolute";
     threat.style.fontSize = "35px";
     threat.style.cursor = "pointer";
 
-    const maxX =
-        gameArea.clientWidth - 40;
-
-    const maxY =
-        gameArea.clientHeight - 40;
+    const maxX = gameArea.clientWidth - 40;
+    const maxY = gameArea.clientHeight - 40;
 
     threat.style.left =
         Math.random() * maxX + "px";
@@ -461,47 +365,40 @@ function createThreat() {
 
         score++;
 
-        scoreElement.textContent =
-            score;
+        scoreElement.textContent = score;
 
-        if (
-            score >= 5 &&
-            !comboFiveUnlocked
-        ) {
+
+        // COMBO 5
+        if (score >= 5 && !comboFiveUnlocked) {
 
             comboFiveUnlocked = true;
 
-            achievements.comboFive = true;
+            if (comboAchievement) {
 
-            saveAchievements();
-            updateAchievementsPanel();
+                comboAchievement.classList.remove("show");
 
-            comboAchievement.classList.remove("show");
+                void comboAchievement.offsetWidth;
 
-            void comboAchievement.offsetWidth;
-
-            comboAchievement.classList.add("show");
+                comboAchievement.classList.add("show");
+            }
         }
 
 
-        if (
-            score >= 10 &&
-            !cyberMasterUnlocked
-        ) {
+        // CYBER MASTER
+        if (score >= 10 && !cyberMasterUnlocked) {
 
             cyberMasterUnlocked = true;
 
-            achievements.cyberMaster = true;
+            if (masterAchievement) {
 
-            saveAchievements();
-            updateAchievementsPanel();
+                masterAchievement.classList.remove("show");
 
-            masterAchievement.classList.remove("show");
+                void masterAchievement.offsetWidth;
 
-            void masterAchievement.offsetWidth;
-
-            masterAchievement.classList.add("show");
+                masterAchievement.classList.add("show");
+            }
         }
+
 
         updateDifficulty();
 
@@ -516,10 +413,7 @@ function createThreat() {
 
     setTimeout(function () {
 
-        if (
-            threat.parentElement &&
-            gameRunning
-        ) {
+        if (threat.parentElement && gameRunning) {
 
             threat.remove();
 
@@ -532,10 +426,3 @@ function createThreat() {
 
     }, getThreatSpeed());
 }
-
-
-// =========================
-// LOAD ACHIEVEMENTS
-// =========================
-
-updateAchievementsPanel();
