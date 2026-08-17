@@ -21,9 +21,12 @@ const message = document.getElementById("message");
 const achievement = document.getElementById("achievement");
 const comboAchievement =
     document.getElementById("combo-achievement");
+const masterAchievement =
+    document.getElementById("master-achievement");
 
 let firstHitUnlocked = false;
 let comboFiveUnlocked = false;
+let cyberMasterUnlocked = false;
 
 let highScore =
     Number(localStorage.getItem("cyberDefenderHighScore")) || 0;
@@ -98,6 +101,9 @@ function startGame() {
 
     firstHitUnlocked = false;
     comboFiveUnlocked = false;
+    cyberMasterUnlocked = false;
+
+masterAchievement.classList.remove("show");
 
 comboAchievement.classList.remove("show");
 
@@ -361,6 +367,15 @@ function createThreat() {
         unlockFirstHit();
 
         score++;
+        if (score >= 10 && !cyberMasterUnlocked) {
+    cyberMasterUnlocked = true;
+
+    masterAchievement.classList.remove("show");
+
+    void masterAchievement.offsetWidth;
+
+    masterAchievement.classList.add("show");
+}
         if (score >= 5 && !comboFiveUnlocked) {
     comboFiveUnlocked = true;
 
