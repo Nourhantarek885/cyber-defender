@@ -27,6 +27,26 @@ const masterAchievement =
 let firstHitUnlocked = false;
 let comboFiveUnlocked = false;
 let cyberMasterUnlocked = false;
+const achievements = {
+    firstHit: false,
+    comboFive: false,
+    cyberMaster: false
+};
+
+const savedAchievements =
+    JSON.parse(localStorage.getItem("cyberDefenderAchievements"));
+
+if (savedAchievements) {
+    achievements.firstHit = savedAchievements.firstHit;
+    achievements.comboFive = savedAchievements.comboFive;
+    achievements.cyberMaster = savedAchievements.cyberMaster;
+}
+function saveAchievements() {
+    localStorage.setItem(
+        "cyberDefenderAchievements",
+        JSON.stringify(achievements)
+    );
+}
 
 let highScore =
     Number(localStorage.getItem("cyberDefenderHighScore")) || 0;
@@ -323,6 +343,21 @@ function unlockFirstHit() {
 
     firstHitUnlocked = true;
 
+    achievements.firstHit = true;
+
+    saveAchievements();
+
+    achievement.classList.remove("show");
+
+    void achievement.offsetWidth;
+
+    achievement.classList.add("show");
+}
+
+    if (firstHitUnlocked) return;
+
+    firstHitUnlocked = true;
+
     achievement.classList.remove("show");
 
     void achievement.offsetWidth;
@@ -367,7 +402,20 @@ function createThreat() {
         unlockFirstHit();
 
         score++;
-        if (score >= 10 && !cyberMasterUnlocked) {
+      if (score >= 10 && !cyberMasterUnlocked) {
+
+    cyberMasterUnlocked = true;
+
+    achievements.cyberMaster = true;
+
+    saveAchievements();
+
+    masterAchievement.classList.remove("show");
+
+    void masterAchievement.offsetWidth;
+
+    masterAchievement.classList.add("show");
+}
     cyberMasterUnlocked = true;
 
     masterAchievement.classList.remove("show");
@@ -376,7 +424,20 @@ function createThreat() {
 
     masterAchievement.classList.add("show");
 }
-        if (score >= 5 && !comboFiveUnlocked) {
+       if (score >= 5 && !comboFiveUnlocked) {
+
+    comboFiveUnlocked = true;
+
+    achievements.comboFive = true;
+
+    saveAchievements();
+
+    comboAchievement.classList.remove("show");
+
+    void comboAchievement.offsetWidth;
+
+    comboAchievement.classList.add("show");
+}
     comboFiveUnlocked = true;
 
     comboAchievement.classList.remove("show");
