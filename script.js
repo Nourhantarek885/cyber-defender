@@ -18,6 +18,10 @@ const gameArea = document.getElementById("game-area");
 const startButton = document.getElementById("start-button");
 const message = document.getElementById("message");
 
+const achievement = document.getElementById("achievement");
+
+let firstHitUnlocked = false;
+
 let highScore =
     Number(localStorage.getItem("cyberDefenderHighScore")) || 0;
 
@@ -89,16 +93,16 @@ function startGame() {
     lives = 3;
     gameRunning = true;
 
+    firstHitUnlocked = false;
+
+    achievement.classList.remove("show");
+
     scoreElement.textContent = score;
     timerElement.textContent = timeLeft;
-    if (timeLeft <= 10) {
-    timerElement.parentElement.classList.add("danger");
-} else {
-    timerElement.parentElement.classList.remove("danger");
-}
     livesElement.textContent = "❤️❤️❤️";
+
     timerElement.parentElement.classList.remove("danger");
-livesElement.parentElement.classList.remove("danger");
+    livesElement.parentElement.classList.remove("danger");
 
     message.style.display = "none";
 
@@ -177,7 +181,35 @@ function getThreatSpeed() {
 // =========================
 
 function startTimer() {
-    function winGame() {
+
+    clearInterval(timerInterval);
+
+    timerInterval = setInterval(function () {
+
+        timeLeft--;
+
+        timerElement.textContent = timeLeft;
+
+        if (timeLeft <= 10) {
+            timerElement.parentElement.classList.add("danger");
+        } else {
+            timerElement.parentElement.classList.remove("danger");
+        }
+
+        if (timeLeft <= 0) {
+            winGame();
+        }
+
+    }, 1000);
+}
+
+
+// =========================
+// VICTORY
+// =========================
+
+function winGame() {
+
     gameRunning = false;
 
     clearInterval(timerInterval);
@@ -196,27 +228,13 @@ function startTimer() {
     message.style.display = "block";
 
     setTimeout(function () {
+
         gameScreen.style.display = "none";
         startScreen.style.display = "flex";
 
         startHighScoreElement.textContent = highScore;
+
     }, 2500);
-}
-
-    clearInterval(timerInterval);
-
-    timerInterval = setInterval(function () {
-
-        timeLeft--;
-
-        timerElement.textContent = timeLeft;
-
-       if (timeLeft <= 0) {
-    winGame();
-}
-        }
-
-    }, 1000);
 }
 
 
@@ -230,14 +248,16 @@ function loseLife() {
 
     lives--;
 
-    livesElement.textContent = "❤️".repeat(lives);
-    if (lives <= 1) {
-    livesElement.parentElement.classList.add("danger");
-} else {
-    livesElement.parentElement.classList.remove("danger");
-}
+    livesElement.textContent =
+        "❤️".repeat(lives);
 
     playLifeLostSound();
+
+    if (lives <= 1) {
+        livesElement.parentElement.classList.add("danger");
+    } else {
+        livesElement.parentElement.classList.remove("danger");
+    }
 
     if (lives <= 0) {
         endGame("NO LIVES LEFT!");
@@ -282,6 +302,24 @@ function endGame(reason) {
 
 
 // =========================
+// FIRST HIT ACHIEVEMENT
+// =========================
+
+function unlockFirstHit() {
+
+    if (firstHitUnlocked) return;
+
+    firstHitUnlocked = true;
+
+    achievement.classList.remove("show");
+
+    void achievement.offsetWidth;
+
+    achievement.classList.add("show");
+}
+
+
+// =========================
 // CREATE THREAT
 // =========================
 
@@ -313,6 +351,8 @@ function createThreat() {
         if (!gameRunning) return;
 
         playHitSound();
+
+        unlockFirstHit();
 
         score++;
 
